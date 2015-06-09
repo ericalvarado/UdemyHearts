@@ -10,17 +10,36 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    // Properties
+    let suits = ["spade","heart","diamond","club"] // Moved the initizliation of suits to the properties section
+    var deck = [Card]()
+    
     override init(size: CGSize){
         super.init(size: size)
         
         self.backgroundColor = UIColor.greenColor()
         
-        // Testing the Card class
-        let card = Card(rank: 14, suit: "diamond", faceUp: false)
-        card.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
-        self.addChild(card)
+        dealCards()
+
     }
 
+    // Method to initialize deck with suit and rank
+    func dealCards(){
+        
+        // Changed code from lesson to for-in's rather than using counting/range for loops
+        for suit in suits {
+            for rank in 2...14 {
+                let card = Card(rank: rank, suit: suit, faceUp: false)
+                deck.append(card)
+            }
+        }
+        
+        // Testing deck build
+        for card in deck{
+            println("\(card.suit)_\(card.rank)")
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,22 +49,6 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        
-        // Testing the Card Class
-        
-        // For statement creates a variable 'touch' based on the touches set
-        for touch: AnyObject in touches {
-            
-            // Set the CGPoint of the touch location
-            let location = touch.locationInNode(self)
-            
-            // Test the set of the node to the class of Card, if true execute flip, if not println 'Not Card'
-            if let node = nodeAtPoint(location) as? Card {
-                node.flip()
-            } else {
-                println("Not Card")
-            }
-        }
         
     }
    
