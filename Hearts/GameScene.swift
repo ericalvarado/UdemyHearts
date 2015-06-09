@@ -15,9 +15,8 @@ class GameScene: SKScene {
         
         self.backgroundColor = UIColor.greenColor()
         
-        // Testing by placing card in the middle
-        let texture = SKTexture(imageNamed: "spade_2")
-        let card = SKSpriteNode(texture: texture)
+        // Testing the Card class
+        let card = Card(rank: 14, suit: "diamond", faceUp: false)
         card.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
         self.addChild(card)
     }
@@ -31,7 +30,23 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-
+        
+        // Testing the Card Class
+        
+        // For statement creates a variable 'touch' based on the touches set
+        for touch: AnyObject in touches {
+            
+            // Set the CGPoint of the touch location
+            let location = touch.locationInNode(self)
+            
+            // Test the set of the node to the class of Card, if true execute flip, if not println 'Not Card'
+            if let node = nodeAtPoint(location) as? Card {
+                node.flip()
+            } else {
+                println("Not Card")
+            }
+        }
+        
     }
    
     override func update(currentTime: CFTimeInterval) {
