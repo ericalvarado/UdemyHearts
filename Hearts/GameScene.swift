@@ -35,47 +35,6 @@ class GameScene: SKScene {
         
         dealCards()
 
-        // Testing positioning
-//        var test = SKSpriteNode(imageNamed: "cardback")
-//        
-//        var leftEdge = test.size.width/2
-//        var bottomEdge = test.size.height/2
-//        var topEdge = 1.5 * test.size.height
-//        var rightEdge = 1.5 * test.size.width
-//        var handSize:CGFloat = 12
-//        var testPosition:CGFloat = self.size.width/2 + self.cardOffset * (handSize/2 - CGFloat(12))
-//        
-//        println("Test: \(testPosition)")
-//        
-//        self.addChild(test)
-//        test.position = CGPointMake(leftEdge, bottomEdge)
-//
-//        var test2 = SKSpriteNode(imageNamed: "spade_14")
-//        self.addChild(test2)
-//        test2.position = CGPointMake(testPosition, bottomEdge)
-        
-        /* Trying to breakdown logic
-        - SKSpriteNode's origin is center
-        - GameScene origin (0,0) is lower left
-        - Halving the width will gain control over left edge
-        - Halving the height will gain control over bottom edge
-        - 150% of the width will gain control over right edge
-        - 150% of the height will gain control over top edge
-        - cardOffset controls the layering of the card
-        - iPad2 self.size.width = 1024
-        - First term in formula: (1024 + (35 * 12 + 80))/2 = 762
-        - Second term in formula [80/2 - (cardCount - 1) * 35] = [40 - (cardCount - 1) * 35] >>
-           For 1st card, second term is [-40 - 0 * 35] = -40
-           For 13th card, second term is [-40 - 12 * 35] = -460
-        - Therefore, first term - second term is:
-           For 1st card, 722
-           For 13th card, 382
-        In english, half the screen size + half of the card width + half of the offsets, this sets the rightmost position for the 1st card... then works the cards by flexing the offsets
-        
-        I think it would have been better if:
-        var handSize:CGFloat = 12
-        var testPosition:CGFloat = self.size.width/2 + self.cardOffset * (handSize/2 - CGFloat(12))
-        */
     }
 
     // Method to initialize deck with suit and rank
@@ -203,7 +162,158 @@ class GameScene: SKScene {
             }
         }
         
-        self.runAction(deal)
+        // Create a SKAction delay
+        let delay = SKAction.waitForDuration(2.0)
+        
+        // Create a SKAction sort
+        let sort = SKAction.runBlock { () -> Void in
+            
+            // Call sortCards function to sort the cards by rank
+            self.player1Cards = self.sortCards(self.player1Cards)
+            self.player2Cards = self.sortCards(self.player2Cards)
+            self.player3Cards = self.sortCards(self.player3Cards)
+            self.player4Cards = self.sortCards(self.player4Cards)
+            
+            // Loop though each player and set their z position by rank and suit, the move each card to the new position
+            for i in 0...self.player1Cards.count - 1 {
+                self.player1Cards[i].zPosition = CGFloat(self.player1Cards[i].rank) + self.cardType(self.player1Cards[i].suit)
+                let move = SKAction.moveTo(self.player1CardPostions[i], duration: 1.0)
+                self.player1Cards[i].runAction(move)
+            }
+            for i in 0...self.player2Cards.count - 1 {
+                self.player2Cards[i].zPosition = CGFloat(self.player2Cards[i].rank) + self.cardType(self.player2Cards[i].suit)
+                let move = SKAction.moveTo(self.player2CardPostions[i], duration: 1.0)
+                self.player2Cards[i].runAction(move)
+            }
+            for i in 0...self.player3Cards.count - 1 {
+                self.player3Cards[i].zPosition = CGFloat(self.player3Cards[i].rank) + self.cardType(self.player3Cards[i].suit)
+                let move = SKAction.moveTo(self.player3CardPostions[i], duration: 1.0)
+                self.player3Cards[i].runAction(move)
+            }
+            for i in 0...self.player4Cards.count - 1 {
+                self.player4Cards[i].zPosition = CGFloat(self.player4Cards[i].rank) + self.cardType(self.player4Cards[i].suit)
+                let move = SKAction.moveTo(self.player4CardPostions[i], duration: 1.0)
+                self.player4Cards[i].runAction(move)
+            }
+        }
+        
+        // Establish SKAction sequence block
+        let sequence = SKAction.sequence([deal,delay,sort,delay])
+        
+        // Run block
+        self.runAction(sequence)
+    }
+    
+    func cardType(suit: String) -> CGFloat {
+        var type:CGFloat = 0
+        
+        switch suit {
+            case "spade":
+                type = 0
+            case "heart":
+                type = 13
+            case "club":
+                type = 26
+            case "diamond":
+                type = 39
+        default:
+            type = 0
+        }
+        
+        return type
+    }
+    
+    func sortCards(playerCards: [Card]) -> [Card]{
+        
+        // Set local properties
+        var spadeCards = [Card]()
+        var heartCards = [Card]()
+        var clubCards = [Card]()
+        var diamondCards = [Card]()
+        var sortedPlayerCards = [Card]()
+        
+        // Categorize each card and add to respective suit arrays
+        for card in playerCards {
+            switch card.suit {
+                case "spade":
+                    spadeCards.append(card)
+                case "heart":
+                    heartCards.append(card)
+                case "club":
+                    clubCards.append(card)
+                case "diamond":
+                    diamondCards.append(card)
+            default:
+                break
+            }
+        }
+        
+        // Walk through each suit array and perform a bubble sort, then add the cards to the return card array
+        if spadeCards.count > 1 {
+            for i in 1...spadeCards.count {
+                for j in 0...spadeCards.count - 2 {
+                    if spadeCards[j+1].rank < spadeCards[j].rank {
+                        let temp = spadeCards[j]
+                        spadeCards[j] = spadeCards[j+1]
+                        spadeCards[j+1] = temp
+                    }
+                }
+            }
+            
+            for i in 0...spadeCards.count - 1{
+                sortedPlayerCards.append(spadeCards[i])
+            }
+        }
+        
+        if heartCards.count > 1 {
+            for i in 1...heartCards.count {
+                for j in 0...heartCards.count - 2 {
+                    if heartCards[j+1].rank < heartCards[j].rank {
+                        let temp = heartCards[j]
+                        heartCards[j] = heartCards[j+1]
+                        heartCards[j+1] = temp
+                    }
+                }
+            }
+            
+            for i in 0...heartCards.count - 1{
+                sortedPlayerCards.append(heartCards[i])
+            }
+        }
+        
+        if clubCards.count > 1 {
+            for i in 1...clubCards.count {
+                for j in 0...clubCards.count - 2 {
+                    if clubCards[j+1].rank < clubCards[j].rank {
+                        let temp = clubCards[j]
+                        clubCards[j] = clubCards[j+1]
+                        clubCards[j+1] = temp
+                    }
+                }
+            }
+            
+            for i in 0...clubCards.count - 1{
+                sortedPlayerCards.append(clubCards[i])
+            }
+        }
+        
+        if diamondCards.count > 1 {
+            for i in 1...diamondCards.count {
+                for j in 0...diamondCards.count - 2 {
+                    if diamondCards[j+1].rank < diamondCards[j].rank {
+                        let temp = diamondCards[j]
+                        diamondCards[j] = diamondCards[j+1]
+                        diamondCards[j+1] = temp
+                    }
+                }
+            }
+            
+            for i in 0...diamondCards.count - 1{
+                sortedPlayerCards.append(diamondCards[i])
+            }
+        }
+        
+        return sortedPlayerCards
     }
     
     required init?(coder aDecoder: NSCoder) {

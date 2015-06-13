@@ -1,0 +1,43 @@
+Notes from Lecture 6
+
+// Testing positioning
+//        var test = SKSpriteNode(imageNamed: "cardback")
+//
+//        var leftEdge = test.size.width/2
+//        var bottomEdge = test.size.height/2
+//        var topEdge = 1.5 * test.size.height
+//        var rightEdge = 1.5 * test.size.width
+//        var handSize:CGFloat = 12
+//        var testPosition:CGFloat = self.size.width/2 + self.cardOffset * (handSize/2 - CGFloat(12))
+//
+//        println("Test: \(testPosition)")
+//
+//        self.addChild(test)
+//        test.position = CGPointMake(leftEdge, bottomEdge)
+//
+//        var test2 = SKSpriteNode(imageNamed: "spade_14")
+//        self.addChild(test2)
+//        test2.position = CGPointMake(testPosition, bottomEdge)
+
+/* Trying to breakdown logic
+- SKSpriteNode's origin is center
+- GameScene origin (0,0) is lower left
+- Halving the width will gain control over left edge
+- Halving the height will gain control over bottom edge
+- 150% of the width will gain control over right edge
+- 150% of the height will gain control over top edge
+- cardOffset controls the layering of the card
+- iPad2 self.size.width = 1024
+- First term in formula: (1024 + (35 * 12 + 80))/2 = 762
+- Second term in formula [80/2 - (cardCount - 1) * 35] = [40 - (cardCount - 1) * 35] >>
+For 1st card, second term is [-40 - 0 * 35] = -40
+For 13th card, second term is [-40 - 12 * 35] = -460
+- Therefore, first term - second term is:
+For 1st card, 722
+For 13th card, 382
+In english, half the screen size + half of the card width + half of the offsets, this sets the rightmost position for the 1st card... then works the cards by flexing the offsets
+
+I think it would have been better if:
+var handSize:CGFloat = 12
+var testPosition:CGFloat = self.size.width/2 + self.cardOffset * (handSize/2 - CGFloat(12))
+*/
