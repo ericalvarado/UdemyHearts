@@ -57,6 +57,8 @@ class GameScene: SKScene {
     var gameInProgress = false
     var canPlayHearts = false
     
+    let centerCard = SKSpriteNode(imageNamed: "cardback")
+    
     // Initializer
     override init(size: CGSize){
         super.init(size: size)
@@ -68,6 +70,8 @@ class GameScene: SKScene {
         establishPlayerPositions()
         
         placePlayerLabels()
+        
+        placeScoreLabels()
         
     }
 
@@ -367,7 +371,7 @@ class GameScene: SKScene {
     // Method to determine the position to where the played card resides
     func establishPlayerPositions(){
         // Set up center card
-        let centerCard = SKSpriteNode(imageNamed: "cardback")
+        
         centerCard.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
         self.addChild(centerCard)
         
@@ -423,6 +427,37 @@ class GameScene: SKScene {
         player4Label.text = "4"
         player4Label.position = CGPointMake(self.frame.width - sides/2,CGRectGetMidY(self.frame) + player4Label.frame.height/2)
         self.addChild(player4Label)
+        
+    }
+    
+    func placeScoreLabels(){
+        player1ScoreLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        player1ScoreLabel.fontSize = 35
+        player1ScoreLabel.fontColor = SKColor.blackColor()
+        player1ScoreLabel.text = "Score:\(player1Score)"
+        player1ScoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), self.sides + centerCard.frame.height + 20)
+        self.addChild(player1ScoreLabel)
+        
+        player2ScoreLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        player2ScoreLabel.fontSize = 35
+        player2ScoreLabel.fontColor = SKColor.blackColor()
+        player2ScoreLabel.text = "Score:\(player2Score)"
+        player2ScoreLabel.position = CGPointMake(self.sides + centerCard.frame.width/2 + cardOffset + player2ScoreLabel.frame.width/2 + 20,CGRectGetMidY(self.frame))
+        self.addChild(player2ScoreLabel)
+        
+        player3ScoreLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        player3ScoreLabel.fontSize = 35
+        player3ScoreLabel.fontColor = SKColor.blackColor()
+        player3ScoreLabel.text = "Score:\(player3Score)"
+        player3ScoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), self.frame.height - self.sides - centerCard.frame.height - 20 - player3ScoreLabel.frame.height/2)
+        self.addChild(player3ScoreLabel)
+        
+        player4ScoreLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        player4ScoreLabel.fontSize = 35
+        player4ScoreLabel.fontColor = SKColor.blackColor()
+        player4ScoreLabel.text = "Score:\(player4Score)"
+        player4ScoreLabel.position = CGPointMake(self.frame.width - self.sides - centerCard.frame.width/2 - cardOffset - player2ScoreLabel.frame.width/2 - 20,CGRectGetMidY(self.frame))
+        self.addChild(player4ScoreLabel)
         
     }
     
