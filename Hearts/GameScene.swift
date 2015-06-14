@@ -27,6 +27,36 @@ class GameScene: SKScene {
     let cardOffset = CGFloat(35.0)
     let sides = CGFloat(50.0)
     
+    var player1PlayingPosition = CGPoint()
+    var player1PlayingCard = [Card]()
+    var player2PlayingPosition = CGPoint()
+    var player2PlayingCard = [Card]()
+    var player3PlayingPosition = CGPoint()
+    var player3PlayingCard = [Card]()
+    var player4PlayingPosition = CGPoint()
+    var player4PlayingCard = [Card]()
+
+    var currentMoveCards = [Card]()
+    
+    var player1Label = SKLabelNode()
+    var player2Label = SKLabelNode()
+    var player3Label = SKLabelNode()
+    var player4Label = SKLabelNode()
+    
+    var player1ScoreLabel = SKLabelNode()
+    var player2ScoreLabel = SKLabelNode()
+    var player3ScoreLabel = SKLabelNode()
+    var player4ScoreLabel = SKLabelNode()
+    
+    var player1Score = 0
+    var player2Score = 0
+    var player3Score = 0
+    var player4Score = 0
+    
+    var currentPlayer = 0
+    var gameInProgress = false
+    var canPlayHearts = false
+    
     // Initializer
     override init(size: CGSize){
         super.init(size: size)
@@ -34,7 +64,11 @@ class GameScene: SKScene {
         self.backgroundColor = UIColor.greenColor()
         
         dealCards()
-
+        
+        establishPlayerPositions()
+        
+        placePlayerLabels()
+        
     }
 
     // Method to initialize deck with suit and rank
@@ -201,9 +235,22 @@ class GameScene: SKScene {
         let sequence = SKAction.sequence([deal,delay,sort,delay])
         
         // Run block
-        self.runAction(sequence)
+        self.runAction(sequence, completion: { () -> Void in
+            let move = SKAction.moveTo(self.player1PlayingPosition, duration: 1)
+            self.player1Cards[0].runAction(move)
+            
+            let move2 = SKAction.moveTo(self.player2PlayingPosition, duration: 1)
+            self.player2Cards[0].runAction(move2)
+            
+            let move3 = SKAction.moveTo(self.player3PlayingPosition, duration: 1)
+            self.player3Cards[0].runAction(move3)
+            
+            let move4 = SKAction.moveTo(self.player4PlayingPosition, duration: 1)
+            self.player4Cards[0].runAction(move4)
+        })
     }
     
+    // Method to establish a suit's base z-position
     func cardType(suit: String) -> CGFloat {
         var type:CGFloat = 0
         
@@ -223,6 +270,7 @@ class GameScene: SKScene {
         return type
     }
     
+    // Method to sort cards
     func sortCards(playerCards: [Card]) -> [Card]{
         
         // Set local properties
@@ -314,6 +362,68 @@ class GameScene: SKScene {
         }
         
         return sortedPlayerCards
+    }
+    
+    // Method to determine the position to where the played card resides
+    func establishPlayerPositions(){
+        // Set up center card
+        let centerCard = SKSpriteNode(imageNamed: "cardback")
+        centerCard.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+        self.addChild(centerCard)
+        
+        //Player 1
+        let newX1 = centerCard.position.x
+        let newY1 = centerCard.position.y - centerCard.size.height/2 - cardOffset - centerCard.size.height/2
+        player1PlayingPosition = CGPoint(x: newX1, y: newY1)
+        
+        // Player 2
+        let newX2 = centerCard.position.x - centerCard.size.width/2 - cardOffset - centerCard.size.width/2
+        let newY2 = centerCard.position.y
+        player2PlayingPosition = CGPoint(x: newX2, y: newY2)
+        
+        //Player 3
+        let newX3 = centerCard.position.x
+        let newY3 = centerCard.position.y + centerCard.size.height/2 + cardOffset + centerCard.size.height/2
+        player3PlayingPosition = CGPoint(x: newX3, y: newY3)
+        
+        // Player 4
+        let newX4 = centerCard.position.x + centerCard.size.width/2 + cardOffset + centerCard.size.width/2
+        let newY4 = centerCard.position.y
+        player4PlayingPosition = CGPoint(x: newX4, y: newY4)
+    }
+    
+    // Method to place player labels on the screen
+    func placePlayerLabels(){
+        
+        // Label Nodes
+        player1Label = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+        player1Label.fontColor = SKColor.brownColor()
+        player1Label.fontSize = 40
+        player1Label.text = "1"
+        player1Label.position = CGPointMake(CGRectGetMidX(self.frame) - player1Label.frame.width/2,sides/2 - player1Label.frame.height/2)
+        self.addChild(player1Label)
+        
+        player2Label = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+        player2Label.fontColor = SKColor.brownColor()
+        player2Label.fontSize = 40
+        player2Label.text = "2"
+        player2Label.position = CGPointMake(sides/2,CGRectGetMidY(self.frame) + player2Label.frame.height/2)
+        self.addChild(player2Label)
+        
+        player3Label = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+        player3Label.fontColor = SKColor.brownColor()
+        player3Label.fontSize = 40
+        player3Label.text = "3"
+        player3Label.position = CGPointMake(CGRectGetMidX(self.frame) - player3Label.frame.width/2, self.frame.height - sides/2 - player3Label.frame.height/2)
+        self.addChild(player3Label)
+        
+        player4Label = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+        player4Label.fontColor = SKColor.brownColor()
+        player4Label.fontSize = 40
+        player4Label.text = "4"
+        player4Label.position = CGPointMake(self.frame.width - sides/2,CGRectGetMidY(self.frame) + player4Label.frame.height/2)
+        self.addChild(player4Label)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
