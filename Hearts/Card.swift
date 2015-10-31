@@ -35,7 +35,9 @@ class Card: SKSpriteNode {
         
         // Call the parent initializer passing texture, color, and size
         // - initWithTexture:color:size (Designated Initializer)
-        super.init(texture:texture,color:nil,size:texture.size())
+        
+        // Swift 2.0 Upgrade - http://stackoverflow.com/questions/31250159/swift-2-migration-error-no-longer-can-pass-in-nil-in-the-designated-initialiser
+        super.init(texture:texture,color:UIColor.clearColor(),size:texture.size())
     }
 
     required init?(coder aDecoder: NSCoder) {

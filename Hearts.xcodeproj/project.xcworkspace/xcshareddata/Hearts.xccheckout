@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>493ED748-9CF8-46AD-8F73-E71EE85FD30A</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Hearts</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>00DF219C19EBACB5CEFB3FD0BFD8D8FE6CA656F5</key>
 		<string>https://github.com/ericalvarado/UdemyHearts.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Hearts.xcodeproj/project.xcworkspace</string>
+	<string>Hearts.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>00DF219C19EBACB5CEFB3FD0BFD8D8FE6CA656F5</key>

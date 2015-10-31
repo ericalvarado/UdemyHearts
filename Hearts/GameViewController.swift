@@ -36,13 +36,25 @@ class GameViewController: UIViewController {
     override func shouldAutorotate() -> Bool {
         return true
     }
-
+    
+    // Code to set supported Orientations
+    // http://iphonedev.tv/blog/2015/6/23/fix-uiviewcontroller-supportedinterfaceorientations-to-use-uiinterfaceorientationmask-and-optionsettype-in-swift-2
+    
+    // Swift 1.2 Version
+    /*
     override func supportedInterfaceOrientations() -> Int {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
         } else {
             return Int(UIInterfaceOrientationMask.All.rawValue)
         }
+    }
+    */
+    
+    // Swift 2 Version
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Landscape]
+        return orientation
     }
 
     override func didReceiveMemoryWarning() {

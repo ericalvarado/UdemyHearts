@@ -302,7 +302,7 @@ class GameScene: SKScene {
         
         // Walk through each suit array and perform a bubble sort, then add the cards to the return card array
         if spadeCards.count > 1 {
-            for i in 1...spadeCards.count {
+            for _ in 1...spadeCards.count {
                 for j in 0...spadeCards.count - 2 {
                     if spadeCards[j+1].rank < spadeCards[j].rank {
                         let temp = spadeCards[j]
@@ -318,7 +318,7 @@ class GameScene: SKScene {
         }
         
         if heartCards.count > 1 {
-            for i in 1...heartCards.count {
+            for _ in 1...heartCards.count {
                 for j in 0...heartCards.count - 2 {
                     if heartCards[j+1].rank < heartCards[j].rank {
                         let temp = heartCards[j]
@@ -334,7 +334,7 @@ class GameScene: SKScene {
         }
         
         if clubCards.count > 1 {
-            for i in 1...clubCards.count {
+            for _ in 1...clubCards.count {
                 for j in 0...clubCards.count - 2 {
                     if clubCards[j+1].rank < clubCards[j].rank {
                         let temp = clubCards[j]
@@ -350,7 +350,7 @@ class GameScene: SKScene {
         }
         
         if diamondCards.count > 1 {
-            for i in 1...diamondCards.count {
+            for _ in 1...diamondCards.count {
                 for j in 0...diamondCards.count - 2 {
                     if diamondCards[j+1].rank < diamondCards[j].rank {
                         let temp = diamondCards[j]
@@ -469,7 +469,8 @@ class GameScene: SKScene {
 
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    // Updated code to Swift 2.0 - http://stackoverflow.com/questions/30892254/override-func-error-in-swift-2
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
     }
    
