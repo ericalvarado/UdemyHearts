@@ -240,18 +240,28 @@ class GameScene: SKScene {
         
         // Run block
         self.runAction(sequence, completion: { () -> Void in
-            let move = SKAction.moveTo(self.player1PlayingPosition, duration: 1)
-            self.player1Cards[0].runAction(move)
+//            let move = SKAction.moveTo(self.player1PlayingPosition, duration: 1)
+//            self.player1Cards[0].runAction(move)
+//            
+//            let move2 = SKAction.moveTo(self.player2PlayingPosition, duration: 1)
+//            self.player2Cards[0].runAction(move2)
+//            
+//            let move3 = SKAction.moveTo(self.player3PlayingPosition, duration: 1)
+//            self.player3Cards[0].runAction(move3)
+//            
+//            let move4 = SKAction.moveTo(self.player4PlayingPosition, duration: 1)
+//            self.player4Cards[0].runAction(move4)
             
-            let move2 = SKAction.moveTo(self.player2PlayingPosition, duration: 1)
-            self.player2Cards[0].runAction(move2)
+            self.gameInProgress = true
+            let turn = Int(arc4random_uniform(4) + 1)
+            self.currentPlayer = turn
+            self.flashCurrentPlayer(turn)
             
-            let move3 = SKAction.moveTo(self.player3PlayingPosition, duration: 1)
-            self.player3Cards[0].runAction(move3)
-            
-            let move4 = SKAction.moveTo(self.player4PlayingPosition, duration: 1)
-            self.player4Cards[0].runAction(move4)
         })
+    }
+    
+    func flashCurrentPlayer(player: Int){
+        print("Player: \(player)'s turn")
     }
     
     // Method to establish a suit's base z-position
